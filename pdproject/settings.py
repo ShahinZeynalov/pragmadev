@@ -24,10 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')^k&s2d3n!8!m&q&8dt@*g7jyz*xkv15u@ok2xb02sd=fuv*^s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 PRODUCTION = not DEBUG
 
-ALLOWED_HOSTS = ['198.199.78.112', '127.0.0.1']
+ALLOWED_HOSTS = ['198.199.78.112', '127.0.0.1', '34.89.179.178']
 
 ADMINS = [('Kamran', 'kamransrecovery@gmail.com')]
 
@@ -77,8 +77,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pdproject.wsgi.application'
 
 # CELERY STUFF
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -141,8 +141,6 @@ EMAIL_HOST_PASSWORD = 'fsqcyadagqipthcz'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -160,9 +158,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
