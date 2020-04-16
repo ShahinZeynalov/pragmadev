@@ -27,7 +27,8 @@ SECRET_KEY = ')^k&s2d3n!8!m&q&8dt@*g7jyz*xkv15u@ok2xb02sd=fuv*^s'
 DEBUG = False
 PRODUCTION = not DEBUG
 
-ALLOWED_HOSTS = ['198.199.78.112', '127.0.0.1', '34.89.179.178']
+# ALLOWED_HOSTS = ['198.199.78.112', '127.0.0.1', '34.89.179.178']
+ALLOWED_HOSTS = ['127.0.0.1', '34.89.179.178']
 
 ADMINS = [('Kamran', 'kamransrecovery@gmail.com')]
 
