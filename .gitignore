@@ -1,2 +1,5 @@
 .venv
 db.sqlite3
+.postgresdb
+*.pyc
+**/__pycache__/
