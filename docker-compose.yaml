@@ -25,10 +25,8 @@ services:
     build: .
     container_name: web
     restart: always
-    environment:
-      - VIRTUAL_HOST=localhost, 34.89.179.178
-      - VIRTUAL_PORT=8000
-      - DEBUG=False
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     volumes:

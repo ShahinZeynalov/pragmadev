@@ -1,7 +1,19 @@
-location /static/ {
-    root /code/;
-}
+server {
+    listen 80;
+    server_name 34.89.179.178;
 
-location /media/ {
-    root /code/;
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        root /code/;
+    }
+
+    location /media/ {
+        root /code/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
 }
