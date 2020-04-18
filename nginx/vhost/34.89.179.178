@@ -1,8 +1,8 @@
 
 location /static/ {
-  alias /web/code/;
+  alias /code/;
 }
 
 location /media/ {
-  alias /web/code/;
+  alias /code/;
 }
