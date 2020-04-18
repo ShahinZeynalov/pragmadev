@@ -1,6 +1,6 @@
 
 location /static/ {
-  alias /code/;
+  root /code/;
 }
 
 location /media/ {

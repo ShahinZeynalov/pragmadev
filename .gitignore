@@ -2,4 +2,5 @@
 db.sqlite3
 .postgresdb
 *.pyc
+*.swp
 **/__pycache__/
