@@ -1,21 +1,6 @@
 version: '3.5'
 
 services:
-  nginx:
-    container_name: nginx
-    image: jwilder/nginx-proxy
-    restart: always
-    ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./config/nginx:/etc/nginx/conf.d
-      - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
-      - ./static/:/code/static/
-      - ./media/:/code/media/
-    networks:
-      - djangonetwork
-
   postgres:
     container_name: postgres
     image: postgres:12.1
@@ -69,6 +54,15 @@ services:
       - postgres
       - redis
 
-networks:
-  djangonetwork:
-    driver: bridge
+  nginx:
+    container_name: nginx
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/vhost/:/etc/nginx/vhost.d:ro
+      - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+      - ./static/:/code/static/
+      - ./media/:/code/media/
