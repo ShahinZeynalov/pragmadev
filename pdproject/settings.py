@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')^k&s2d3n!8!m&q&8dt@*g7jyz*xkv15u@ok2xb02sd=fuv*^s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 PRODUCTION = not DEBUG
 
 ALLOWED_HOSTS = ['198.199.78.112', '127.0.0.1', '34.89.179.178']
@@ -82,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pdproject.wsgi.application'
 
-if PRODUCTION:
+if DEBUG:
     # CELERY STUFF
     BROKER_URL = 'redis://redis:6379'
     CELERY_RESULT_BACKEND = 'redis://redis:6379'
@@ -102,15 +102,15 @@ else:
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-else:
-    DATABASES = {
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         }
+#     }
+# else:
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'pragmadevdb',
@@ -171,7 +171,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if PRODUCTION:
+if DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 else:
     STATICFILES_DIRS = [
