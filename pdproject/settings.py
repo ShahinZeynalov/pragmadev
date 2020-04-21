@@ -43,7 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pdapp',
     'email_app',
+
+    'django_celery_beat',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ROOT_URLCONF = 'pdproject.urls'
@@ -77,15 +82,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pdproject.wsgi.application'
 
-# CELERY STUFF
-BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Baku'
-
-
+if PRODUCTION:
+    # CELERY STUFF
+    BROKER_URL = 'redis://redis:6379'
+    CELERY_RESULT_BACKEND = 'redis://redis:6379'
+    CELERY_ACCEPT_CONTENT = ['application/json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TIMEZONE = 'Asia/Baku'
+else:
+    # CELERY STUFF
+    BROKER_URL = 'redis://localhost:6379'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+    CELERY_ACCEPT_CONTENT = ['application/json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TIMEZONE = 'Asia/Baku'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -108,8 +120,6 @@ else:
         'PORT': '5432',
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -156,14 +166,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
+if PRODUCTION:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+    ]

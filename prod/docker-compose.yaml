@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  redis:
+    container_name: redis
+    image: redis:rc-buster
+    ports:
+      - "6379:6379"
+    restart: on-failure
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
