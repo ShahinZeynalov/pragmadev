@@ -1,16 +1,32 @@
 version: '3.5'
 
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:9.6.6
-    env_file:
-      - .env
-    volumes:
-      - ./.postgresdb/:/var/lib/postgresql/data
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: "always"
     ports:
-      - "${POSTGRES_PORT}:5432"
-    restart: on-failure
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/vhost/:/etc/nginx/vhost.d:ro
+      - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+      - ./static/:/code/static
+      - ./media/:/code/media
+
+  postgres:
+    container_name:  postgres-db
+    image:           postgres:9.6.6
+    restart: "always"
+    ports:
+      - 5432:5432 # Bind host port 5432 to PostgreSQL port 5432
+    volumes:
+      - ./pgdb:/var/lib/postgresql/data
+    env_file: .env
+    environment:
+      - LC_ALL=C.UTF-8
+
 
   redis:
     container_name: redis
@@ -20,30 +36,6 @@ services:
     restart: on-failure
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
-
-  web:
-    build: .
-    container_name: web
-    restart: always
-    env_file:
-      - .env
-    environment:
-      - VIRTUAL_HOST=34.89.179.178
-      - HTTP_PORT=8000
-      - STATS_PORT=8002
-
-
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/code/
-      - ./static/:/code/static/
-      - ./media/:/code/media/
-      - ./uwsgi.ini:/conf/uwsgi.ini
-    links:
-      - postgres
-    depends_on:
-      - postgres
 
   celery:
     container_name: celery
@@ -61,19 +53,25 @@ services:
       - postgres
       - redis
 
-  nginx-proxy:
-    container_name: nginx
-    image: jwilder/nginx-proxy
-    restart: always
-    ports:
-      - "80:80"
+  web:
+    container_name: pragmadev
+    build: .
+    restart: "always"
+    env_file: .env
+    environment:
+      - VIRTUAL_HOST=34.89.179.178,127.0.0.1
+      - VIRTUAL_PORT=8000
+      - TIMEOUT=300
+      - HTTP_PORT=8000
+      - STATS_PORT=8001
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx/vhost/:/etc/nginx/vhost.d:ro
-      - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
-      - ./static/:/code/static/
-      - ./media/:/code/media/
-
+      - .:/code
+    ports:
+      - "8000:8000"
+    links:
+      - postgres
+    depends_on:
+      - "postgres"
 networks:
   default:
     external:

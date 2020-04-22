@@ -4,3 +4,10 @@ db.sqlite3
 *.pyc
 *.swp
 **/__pycache__/
+.idea/
+.venv/
+contributors.txt
+*.pyc
+.git/
+redisdb
+pgdb

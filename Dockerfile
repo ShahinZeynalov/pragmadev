@@ -1,20 +1,32 @@
-FROM python:3.6
+FROM python:3.7
 
-COPY requirements.txt /code/requirements.txt
+# Ensure that Python outputs everything that's printed inside
+# the application rather than buffering it.
+ENV PYTHONUNBUFFERED 1
+ENV APP_ROOT /code
+ENV DEBUG False
 
-WORKDIR /code
+# Copy in your requirements file
+ADD requirements.txt /requirements.txt
 
-RUN pip install -r requirements.txt
+# Install build deps, then run `pip install`, then remove unneeded build deps all in a single step. Correct the path to your production requirements file, if needed.
+RUN pip install virtualenvwrapper
+RUN python3 -m venv /venv
+RUN /venv/bin/pip install -U pip
+RUN /venv/bin/pip install --no-cache-dir -r /requirements.txt
 
-ADD . .
+# Copy your application code to the container (make sure you create a .dockerignore file if any large files or directories should be excluded)
+RUN mkdir ${APP_ROOT}
+WORKDIR ${APP_ROOT}
+ADD . ${APP_ROOT}
+COPY mime.types /etc/mime.types
 
-COPY uwsgi.ini /conf/uwsgi.ini
-
+# uWSGI will listen on this port
 EXPOSE 8000
 
+# Call collectstatic (customize the following line with the minimal environment variables needed for manage.py to run):
+RUN if [ -f manage.py ]; then /venv/bin/python manage.py collectstatic --noinput; fi
 
-RUN if [ -f manage.py ]; then python manage.py collectstatic --noinput; fi
-
-#CMD [ "gunicorn", "--bind", "0.0.0.0", "-p", "8000",  "pdproject.wsgi" ]
-
-CMD ["uwsgi", "--ini", "/conf/uwsgi.ini"]
+# Start uWSGI
+CMD [ "/venv/bin/uwsgi", "--ini", "/code/uwsgi.ini"]
+# CMD [ "/venv/bin/daphne", "-b", "0.0.0.0", "-p", "8000", "femigrants.asgi:application"]
