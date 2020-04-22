@@ -102,24 +102,24 @@ else:
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# if DEBUG:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#         }
-#     }
-# else:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pragmadevdb',
-        'USER': 'progbash',
-        'PASSWORD': 'kamran284',
-        'HOST': 'postgres',
-        'PORT': '5432',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'pragmadevdb',
+            'USER': 'progbash',
+            'PASSWORD': 'kamran284',
+            'HOST': 'postgres',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -171,7 +171,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG:
+if PRODUCTION:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 else:
     STATICFILES_DIRS = [
