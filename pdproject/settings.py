@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')^k&s2d3n!8!m&q&8dt@*g7jyz*xkv15u@ok2xb02sd=fuv*^s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 PRODUCTION = not DEBUG
 
 ALLOWED_HOSTS = ['198.199.78.112', '127.0.0.1', '34.89.179.178']
@@ -82,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pdproject.wsgi.application'
 
-if DEBUG:
+if PRODUCTION:
     # CELERY STUFF
     BROKER_URL = 'redis://redis:6379'
     CELERY_RESULT_BACKEND = 'redis://redis:6379'
