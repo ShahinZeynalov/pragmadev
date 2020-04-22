@@ -3,7 +3,7 @@ version: '3.5'
 services:
   postgres:
     container_name: postgres
-    image: postgres:12.1
+    image: postgres:9.6.6
     env_file:
       - .env
     volumes:
