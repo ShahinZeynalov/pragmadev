@@ -27,12 +27,19 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - VIRTUAL_HOST=34.89.179.178
+      - HTTP_PORT=8000
+      - STATS_PORT=8002
+
+
     ports:
       - "8000:8000"
     volumes:
       - .:/code/
       - ./static/:/code/static/
       - ./media/:/code/media/
+      - ./uwsgi.ini:/conf/uwsgi.ini
     links:
       - postgres
     depends_on:
@@ -54,7 +61,7 @@ services:
       - postgres
       - redis
 
-  nginx:
+  nginx-proxy:
     container_name: nginx
     image: jwilder/nginx-proxy
     restart: always
@@ -66,3 +73,8 @@ services:
       - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
       - ./static/:/code/static/
       - ./media/:/code/media/
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
